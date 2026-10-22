@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Barens email signature</title>
+<style>
+  :root { --bg:#f3f4f6; --text:#1f2933; --muted:#5f6b7a; --card:#ffffff; --line:#d5d9e0; --btn:#1f2933; --btn-text:#ffffff; color-scheme: light; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#16191d; --text:#e6e8eb; --muted:#9aa4b1; --card:#ffffff; --line:#3a4048; --btn:#e6e8eb; --btn-text:#16191d; color-scheme: dark; }
+  }
+  body { margin:0; background:var(--bg); color:var(--text); font:16px/1.55 -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+  main { max-width:640px; margin:0 auto; padding:40px 20px 60px; }
+  h1 { font-size:1.5rem; margin:0 0 6px; }
+  p.lead { color:var(--muted); margin:0 0 28px; }
+  .preview { background:var(--card); border:1px solid var(--line); border-radius:6px; padding:24px; overflow-x:auto; }
+  button { margin-top:14px; font:inherit; font-weight:600; background:var(--btn); color:var(--btn-text); border:0; border-radius:6px; padding:10px 18px; cursor:pointer; }
+  button:focus-visible { outline:3px solid #6aa7ff; outline-offset:2px; }
+  #status { margin-left:12px; color:var(--muted); }
+  h2 { font-size:1.05rem; margin:36px 0 8px; }
+  ul { padding-left:20px; margin:0; }
+  li { margin-bottom:8px; }
+  .note { color:var(--muted); font-size:.92rem; margin-top:28px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Barens email signature</h1>
+  <p class="lead">Copy the banner below and paste it into your email signature, under your text signature. The banner links to barens.com.</p>
+
+  <div class="preview">
+    <div id="signature"><a href="https://barens.com" target="_blank"><img src="https://cdn.shopify.com/s/files/1/0640/2254/4536/files/Barens_Email_Signature.png" width="750" height="200" alt="Barens – Visit barens.com" style="display:block; border:0; width:750px; max-width:100%; height:auto;"></a></div>
+  </div>
+  <button type="button" id="copy">Copy signature</button><span id="status" role="status"></span>
+
+  <h2>Where to paste it</h2>
+  <ul>
+    <li><strong>Gmail:</strong> Settings (gear icon) → See all settings → General → Signature. Paste below your text, then scroll down and click Save Changes.</li>
+    <li><strong>Outlook (new or web):</strong> Settings → Accounts → Signatures. Paste below your text and click Save.</li>
+    <li><strong>Outlook desktop (Windows):</strong> File → Options → Mail → Signatures. Paste below your text and click OK.</li>
+    <li><strong>Apple Mail:</strong> Mail → Settings → Signatures. Uncheck “Always match my default message font,” then paste below your text.</li>
+  </ul>
+
+  <p class="note">After pasting, send a test email to yourself and click the banner to make sure it opens barens.com. If the button doesn’t work in your browser, click and drag across the banner to select it, then copy with Ctrl+C (Windows) or Cmd+C (Mac).</p>
+</main>
+<script>
+  document.getElementById('copy').addEventListener('click', function () {
+    var status = document.getElementById('status');
+    var html = document.getElementById('signature').innerHTML;
+    var plain = 'https://barens.com';
+    var done = function (ok) {
+      status.textContent = ok ? 'Copied. Now paste it into your signature settings.' : 'Couldn’t copy automatically. Select the banner and copy it manually.';
+    };
+    var fallback = function () {
+      var handler = function (e) {
+        e.clipboardData.setData('text/html', html);
+        e.clipboardData.setData('text/plain', plain);
+        e.preventDefault();
+      };
+      document.addEventListener('copy', handler);
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      document.removeEventListener('copy', handler);
+      done(ok);
+    };
+    if (navigator.clipboard && window.ClipboardItem) {
+      navigator.clipboard.write([new ClipboardItem({
+        'text/html': new Blob([html], { type: 'text/html' }),
+        'text/plain': new Blob([plain], { type: 'text/plain' })
+      })]).then(function () { done(true); }, fallback);
+    } else {
+      fallback();
+    }
+  });
+</script>
+</body>
+</html>
